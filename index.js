@@ -8,7 +8,7 @@ const port = process.env.PORT || 80
 const cache = {};
 
 function try_cache(key, value) {
-  if (key === null) {
+  if (value === null || isNaN(value)) {
     if (!(key in cache)) {
       cache[key] = null;
     }
