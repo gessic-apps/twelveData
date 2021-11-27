@@ -5,6 +5,19 @@ const express = require('express')
 const app = express()
 const port = process.env.PORT || 80
 
+const cache = {};
+
+function try_cache(key, value) {
+  if (key === null) {
+    if (!(key in cache)) {
+      cache[key] = null;
+    }
+  } else {
+    cache[key] = value
+  }
+
+  return cache[key];
+}
 
 app.get('/getPrice', async (req, res) => {
     console.log(req.query);
@@ -27,13 +40,13 @@ app.get('/getPrice', async (req, res) => {
     res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
 
     res.send([
-      {name: 'btc/usd', price: parseFloat(btcResponse.price)},
-      {name: 'eth/usd', price: parseFloat(ethResponse.price)},
-      {name: 'ada/usd', price: parseFloat(adaResponse.price)},
-      {name: 'bnb/usd', price: parseFloat(bnbResponse.price)},
-      {name: 'algo/usd', price: parseFloat(algoResponse.price)},
+      {name: 'btc/usd',  price: try_cache('btc/usd',  parseFloat(btcResponse.price))},
+      {name: 'eth/usd',  price: try_cache('eth/usd',  parseFloat(ethResponse.price))},
+      {name: 'ada/usd',  price: try_cache('ada/usd',  parseFloat(adaResponse.price))},
+      {name: 'bnb/usd',  price: try_cache('bnb/usd',  parseFloat(bnbResponse.price))},
+      {name: 'algo/usd', price: try_cache('algo/usd', parseFloat(algoResponse.price))},
     ]);
-  })
+  });
 
   app.get('/getWeather', async (req, res) => {
     console.log(req.query);
@@ -53,11 +66,11 @@ app.get('/getPrice', async (req, res) => {
     res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
   
     res.send([
-      { name: 'toronto', temp: parseFloat(torontoResponse.main.temp)},
-      { name: 'london', temp: parseFloat(londonResponse.main.temp)},
-      { name: 'helsinki', temp: parseFloat(helsinkiResponse.main.temp)},
-      { name: 'cairo', temp: parseFloat(cairoResponse.main.temp)},
-      ])
+      { name: 'toronto',  temp: try_cache('toronto',  parseFloat(torontoResponse.main.temp))},
+      { name: 'london',   temp: try_cache('london',   parseFloat(londonResponse.main.temp))},
+      { name: 'helsinki', temp: try_cache('helsinki', parseFloat(helsinkiResponse.main.temp))},
+      { name: 'cairo',    temp: try_cache('cairo',    parseFloat(cairoResponse.main.temp))},
+    ]);
    
 
     // res.send([
@@ -67,10 +80,10 @@ app.get('/getPrice', async (req, res) => {
     //   {name: 'bnb/usd', price: parseFloat(bnbResponse.price)},
     //   {name: 'algo/usd', price: parseFloat(algoResponse.price)},
     // ]);
-  })
+});
 
 
 
 app.listen(port, () => {
-    console.log(`Example app listening at http://localhost:${port}`)
-  })
+  console.log(`Example app listening at http://localhost:${port}`)
+});
