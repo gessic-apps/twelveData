@@ -1,0 +1,15 @@
+
+# Server - Health
+GET http://localhost:3000/api/health HTTP/1.1
+
+###
+
+# Crypto - Coinmark
+GET http://localhost:3000/api/crypto/coinmark HTTP/1.1
+
+###
+
+# Crypto - Twelvedata
+GET http://localhost:3000/api/crypto/healthdata HTTP/1.1
+
+###
