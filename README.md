@@ -24,3 +24,15 @@ Install the dependencies and start the server.
 $ cd <project_directory>
 $ npm install
 ```
+
+Run app
+
+```sh
+$ npm run dev
+```
+
+Build app
+
+```sh
+$ npm run build
+```
